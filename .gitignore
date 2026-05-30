@@ -1,0 +1,36 @@
+
+# Entorno virtual
+venv/
+.venv/
+
+# Variables de entorno (contienen contraseñas)
+.env
+
+# Datos recolectados (pueden ser grandes)
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
