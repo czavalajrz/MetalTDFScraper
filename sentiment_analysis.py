@@ -261,8 +261,8 @@ def _generar_reporte(df: pd.DataFrame, errores: int) -> str:
 
     # Por subgénero (solo los que tienen registros)
     lines.append("\n── Sentimiento por subgénero ──")
-    subgeneros = df[df["subgenero"] != ""]["subgenero"].unique()
-    for sg in sorted(subgeneros):
+    subgeneros = df[df["subgenero"].notna() & (df["subgenero"] != "")]["subgenero"].unique()
+    for sg in sorted(subgeneros, key=str):
         sub = df[df["subgenero"] == sg]
         d = sub["sentimiento"].value_counts()
         pos = d.get("POS", 0)
