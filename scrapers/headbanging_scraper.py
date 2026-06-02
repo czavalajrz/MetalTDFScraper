@@ -6,6 +6,7 @@ Extrae noticias, reseñas y crónicas del sitio de metal mexicano.
 import uuid
 import time
 import random
+from typing import Optional
 import requests
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -112,7 +113,7 @@ def _get_article_urls(section_url: str) -> list:
     return list(dict.fromkeys(urls))  # eliminar duplicados manteniendo orden
 
 
-def _parse_article(url: str, tipo_texto: str) -> dict | None:
+def _parse_article(url: str, tipo_texto: str) -> Optional[dict]:
     """Extrae los datos de un artículo individual."""
     resp = _safe_get(url)
     if not resp:
