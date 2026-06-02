@@ -19,6 +19,7 @@ import pandas as pd
 from config import MIN_TEXT_LENGTH, RAW_DATA_PATH, PROCESSED_DATA_PATH, PROJECT_NAME
 from utils.deduplicator import deduplicate_records
 from utils.exporter import save_csv, save_json, ensure_dir
+from utils.cleaner import is_binary_text
 
 
 def _timestamp():
@@ -82,6 +83,20 @@ def merge_and_clean():
 
     # Filtrar por longitud mínima
     records = [r for r in records if int(r.get("longitud_texto", 0) or 0) >= MIN_TEXT_LENGTH]
+
+    # Eliminar registros con texto binario (imágenes EXIF, datos corruptos)
+    antes = len(records)
+    records = [r for r in records if not is_binary_text(str(r.get("texto", "") or ""))]
+    descartados_binarios = antes - len(records)
+    if descartados_binarios:
+        print(f"[MetalTDFScraper] Registros binarios descartados: {descartados_binarios}")
+
+    # Corregir idiomas mal detectados en textos cortos (< 50 chars)
+    for r in records:
+        texto = str(r.get("texto", "") or "")
+        if len(texto) < 50 and r.get("idioma") not in ("es", "en", "unknown"):
+            r["idioma"] = "unknown"
+
     print(f"[MetalTDFScraper] Total después de limpieza: {len(records)} registros")
 
     # Guardar
